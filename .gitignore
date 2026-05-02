@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+.venv/
+venv/
+env/
+/mbappe/ 
+
+# Environment files
+.env
+.env.*
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Outputs / data
+outputs/
+data/
+cookies/*.txt
+logs/
+*.log
+
+# Media
+*.wav
+*.mp3
+*.mp4
+*.m4a
+*.webm
+
+# Model/cache files
+.cache/
+models/
+checkpoints/
