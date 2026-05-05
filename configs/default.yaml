@@ -14,7 +14,7 @@ audio:
   trim_duration_seconds: 90
 
   # TTS utterance segmentation config.
-  min_utterance_seconds: 2.0
+  min_utterance_seconds: 3.0
   max_utterance_seconds: 12.0
   silence_thresh_dbfs: -40
   min_silence_len_ms: 350
