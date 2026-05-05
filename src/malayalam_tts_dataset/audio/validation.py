@@ -181,6 +181,83 @@ def validate_audio_file(
     )
 
 
+def validate_audio_segment(
+    audio: AudioSegment,
+    path: Path,
+    min_duration_sec: float | None = None,
+    max_duration_sec: float | None = None,
+    silence_dbfs_threshold: float = -55.0,
+) -> AudioValidationResult:
+    """Validate an already-loaded in-memory AudioSegment (avoids ffmpeg re-read)."""
+    warnings: list[str] = []
+    errors: list[str] = []
+
+    duration_sec = len(audio) / 1000.0
+    sample_rate = int(audio.frame_rate)
+    channels = int(audio.channels)
+    rms_dbfs = float(audio.dBFS) if audio.dBFS != float("-inf") else float("-inf")
+    is_silent = False
+    is_too_short = False
+
+    if duration_sec <= 0:
+        errors.append("Audio duration is zero.")
+    elif duration_sec < 0.5:
+        warnings.append(f"Audio is very short: {duration_sec:.3f}s")
+
+    if min_duration_sec is not None:
+        if min_duration_sec < 0:
+            errors.append("min_duration_sec cannot be negative.")
+        elif duration_sec < min_duration_sec:
+            is_too_short = True
+            errors.append(
+                f"Audio is too short: {duration_sec:.3f}s. "
+                f"Required at least {min_duration_sec:.3f}s."
+            )
+
+    if max_duration_sec is not None:
+        if max_duration_sec <= 0:
+            errors.append("max_duration_sec must be positive.")
+        elif duration_sec > max_duration_sec:
+            errors.append(
+                f"Audio is too long: {duration_sec:.3f}s. "
+                f"Maximum allowed is {max_duration_sec:.3f}s."
+            )
+
+    if sample_rate <= 0:
+        errors.append("Invalid sample rate.")
+    elif sample_rate not in {8000, 16000, 22050, 24000, 44100, 48000}:
+        warnings.append(f"Unusual sample rate: {sample_rate}")
+
+    if channels <= 0:
+        errors.append("Invalid channel count.")
+    elif channels > 2:
+        warnings.append(f"Unexpected channel count: {channels}")
+
+    if audio.rms == 0 or audio.dBFS == float("-inf"):
+        is_silent = True
+        errors.append("Audio is fully silent.")
+    elif rms_dbfs is not None and rms_dbfs < silence_dbfs_threshold:
+        is_silent = True
+        errors.append(
+            f"Audio is below silence threshold: {rms_dbfs:.2f} dBFS "
+            f"< {silence_dbfs_threshold:.2f} dBFS."
+        )
+
+    return AudioValidationResult(
+        path=path,
+        exists=True,
+        duration_sec=duration_sec,
+        sample_rate=sample_rate,
+        channels=channels,
+        rms_dbfs=rms_dbfs,
+        is_silent=is_silent,
+        is_too_short=is_too_short,
+        is_valid=len(errors) == 0,
+        warnings=warnings,
+        errors=errors,
+    )
+
+
 def validation_result_to_dict(result: AudioValidationResult) -> dict:
     """
     Convert validation result to a JSON-serializable dictionary.

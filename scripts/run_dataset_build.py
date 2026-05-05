@@ -91,7 +91,9 @@ def main() -> int:
         return 1
 
     print("\nRun summary:")
-    print(json.dumps(result.summary, indent=2, ensure_ascii=False))
+    sys.stdout.buffer.write(
+        (json.dumps(result.summary, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
+    )
 
     return 0 if result.success else 1
 

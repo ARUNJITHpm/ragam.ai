@@ -6,7 +6,7 @@ from pathlib import Path
 from pydub import AudioSegment, silence
 
 from malayalam_tts_dataset.asr.whisper_transcriber import TranscriptSegment
-from malayalam_tts_dataset.audio.validation import validate_audio_file
+from malayalam_tts_dataset.audio.validation import validate_audio_file, validate_audio_segment
 from malayalam_tts_dataset.dataset.records import DatasetRecord
 
 
@@ -140,7 +140,7 @@ def segment_transcribed_audio(
         utt_id = f"{video_id}_{len(records):04d}"
         output_path = output_dir / f"{utt_id}.wav"
 
-        exported = _export_audio_clip(
+        clip = _export_audio_clip(
             audio=audio,
             output_path=output_path,
             start_sec=start_sec,
@@ -148,11 +148,12 @@ def segment_transcribed_audio(
             overwrite=overwrite,
         )
 
-        if not exported:
+        if clip is None:
             continue
 
-        validation = validate_audio_file(
-            output_path,
+        validation = validate_audio_segment(
+            clip,
+            path=output_path,
             min_duration_sec=min_utterance_seconds,
             max_duration_sec=max_utterance_seconds + 0.25,
             silence_dbfs_threshold=silence_thresh_dbfs,
@@ -297,7 +298,7 @@ def _split_long_group_and_export(
         utt_id = f"{video_id}_{start_index + len(records):04d}"
         output_path = output_dir / f"{utt_id}.wav"
 
-        exported = _export_audio_clip(
+        clip = _export_audio_clip(
             audio=audio,
             output_path=output_path,
             start_sec=start_sec,
@@ -305,11 +306,12 @@ def _split_long_group_and_export(
             overwrite=overwrite,
         )
 
-        if not exported:
+        if clip is None:
             continue
 
-        validation = validate_audio_file(
-            output_path,
+        validation = validate_audio_segment(
+            clip,
+            path=output_path,
             min_duration_sec=min_utterance_seconds,
             max_duration_sec=max_utterance_seconds + 0.25,
             silence_dbfs_threshold=silence_thresh_dbfs,
@@ -412,20 +414,27 @@ def _export_audio_clip(
     start_sec: float,
     end_sec: float,
     overwrite: bool,
-) -> bool:
-    if output_path.exists() and not overwrite:
-        return True
+) -> AudioSegment | None:
+    """Export a clip and return the in-memory AudioSegment, or None on failure.
 
+    Returns the existing clip loaded from disk when reusing, or the freshly
+    sliced segment when writing.  Callers use the returned object to validate
+    without a redundant ffmpeg re-read.
+    """
     start_ms = max(0, int(round(start_sec * 1000)))
     end_ms = min(len(audio), int(round(end_sec * 1000)))
 
     if end_ms <= start_ms:
-        return False
+        return None
+
+    clip = audio[start_ms:end_ms]
+
+    if output_path.exists() and not overwrite:
+        return clip
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    clip = audio[start_ms:end_ms]
     clip.export(str(output_path), format="wav")
-    return True
+    return clip
 
 
 def _join_segment_text(segments: list[TranscriptSegment]) -> str:
