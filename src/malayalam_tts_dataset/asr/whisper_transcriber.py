@@ -76,6 +76,7 @@ class WhisperTranscriber:
             language=self.language,
             fp16=self.device == "cuda",
             initial_prompt=self.initial_prompt or None,
+            condition_on_previous_text=False,
         )
 
         raw_segments = result.get("segments", [])
