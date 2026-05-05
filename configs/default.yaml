@@ -21,7 +21,13 @@ audio:
   keep_silence_ms: 120
 
 asr:
+  # whisper_model: "tiny"
+  # whisper_model: "base"
+  # whisper_model: "small"
+  # whisper_model: "medium"
+  # whisper_model: "large-v3"
   whisper_model: "tiny"
+
   language: "ml"
   keep_empty_segments: false
 
