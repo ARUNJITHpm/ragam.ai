@@ -18,6 +18,22 @@ class TranscriptSegment:
     no_speech_prob: float | None = None
 
 
+_MALAYALAM_UNICODE_START = 0x0D00
+_MALAYALAM_UNICODE_END = 0x0D7F
+_MALAYALAM_MIN_SCRIPT_RATIO = 0.5
+
+
+def _malayalam_script_ratio(text: str) -> float:
+    chars = [c for c in text if not c.isspace()]
+    if not chars:
+        return 0.0
+    malayalam_count = sum(
+        1 for c in chars
+        if _MALAYALAM_UNICODE_START <= ord(c) <= _MALAYALAM_UNICODE_END
+    )
+    return malayalam_count / len(chars)
+
+
 class WhisperTranscriber:
     """
     Thin production-style wrapper around openai-whisper.
@@ -27,6 +43,10 @@ class WhisperTranscriber:
 
     _SCRIPT_PRIMERS: dict[str, str] = {
         "ml": "ഇത് മലയാളം ഭാഷയിലുള്ള ഓഡിയോ ആണ്.",
+    }
+
+    _SCRIPT_FILTERS: dict[str, Any] = {
+        "ml": _malayalam_script_ratio,
     }
 
     def __init__(
@@ -42,6 +62,7 @@ class WhisperTranscriber:
         self.device = device or self._resolve_device()
         self.keep_empty_segments = keep_empty_segments
         self.initial_prompt = initial_prompt if initial_prompt is not None else self._SCRIPT_PRIMERS.get(language, "")
+        self._script_ratio_fn = self._SCRIPT_FILTERS.get(language)
         self._model: Any | None = None
 
     @property
@@ -77,6 +98,7 @@ class WhisperTranscriber:
             fp16=self.device == "cuda",
             initial_prompt=self.initial_prompt or None,
             condition_on_previous_text=False,
+            word_timestamps=True,
         )
 
         raw_segments = result.get("segments", [])
@@ -93,6 +115,11 @@ class WhisperTranscriber:
 
             if not text and not self.keep_empty_segments:
                 continue
+
+            if self._script_ratio_fn is not None:
+                ratio = self._script_ratio_fn(text)
+                if ratio < _MALAYALAM_MIN_SCRIPT_RATIO:
+                    continue
 
             start = float(raw_segment.get("start", 0.0))
             end = float(raw_segment.get("end", start))

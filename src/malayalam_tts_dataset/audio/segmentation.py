@@ -69,6 +69,9 @@ def segment_transcribed_audio(
     output_dir = Path(output_segments_dir).expanduser().resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    for stale_file in output_dir.glob(f"{video_id}_*.wav"):
+        stale_file.unlink()
+
     if min_utterance_seconds <= 0:
         raise ValueError("min_utterance_seconds must be > 0.")
 
