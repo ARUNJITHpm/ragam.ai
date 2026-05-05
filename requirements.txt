@@ -6,4 +6,9 @@ openai-whisper>=20231117
 pydub>=0.25.1
 tqdm>=4.66.5
 pandas>=2.2.2
+
+# torch is NOT installed from PyPI on Windows — the latest builds require CUDA DLLs.
+# On Windows, install manually first:
+#   pip install torch==2.4.1+cpu --index-url https://download.pytorch.org/whl/cpu
+# On macOS/Linux, the standard PyPI version works:
 torch>=2.2.0
