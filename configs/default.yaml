@@ -21,12 +21,12 @@ audio:
   keep_silence_ms: 120
 
 asr:
-  # whisper_model: "tiny"
-  # whisper_model: "base"
-  # whisper_model: "small"
-  # whisper_model: "medium"
-  whisper_model: "large-v3"
-  # whisper_model: "tiny"
+  # Malayalam fine-tuned model (recommended):
+  whisper_model: "thennal/whisper-medium-ml"
+  # Generic OpenAI Whisper models (fallback):
+  # whisper_model: "openai/whisper-large-v3"
+  # whisper_model: "openai/whisper-medium"
+  # whisper_model: "openai/whisper-small"
 
   language: "ml"
   keep_empty_segments: false

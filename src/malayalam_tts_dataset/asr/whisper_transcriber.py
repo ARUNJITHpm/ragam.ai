@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 import torch
-import whisper
+from transformers import pipeline as hf_pipeline
 
 
 @dataclass(frozen=True)
@@ -36,14 +36,10 @@ def _malayalam_script_ratio(text: str) -> float:
 
 class WhisperTranscriber:
     """
-    Thin production-style wrapper around openai-whisper.
-
-    The Whisper model is lazy-loaded once and reused for all files.
+    Transcriber using HuggingFace transformers pipeline.
+    Defaults to thennal/whisper-medium-ml, a Whisper medium model
+    fine-tuned specifically on Malayalam speech.
     """
-
-    _SCRIPT_PRIMERS: dict[str, str] = {
-        "ml": "ഇത് മലയാളം ഭാഷയിലുള്ള ഓഡിയോ ആണ്.",
-    }
 
     _SCRIPT_FILTERS: dict[str, Any] = {
         "ml": _malayalam_script_ratio,
@@ -51,7 +47,7 @@ class WhisperTranscriber:
 
     def __init__(
         self,
-        model_name: str = "small",
+        model_name: str = "thennal/whisper-medium-ml",
         language: str = "ml",
         device: str | None = None,
         keep_empty_segments: bool = False,
@@ -61,21 +57,19 @@ class WhisperTranscriber:
         self.language = language
         self.device = device or self._resolve_device()
         self.keep_empty_segments = keep_empty_segments
-        self.initial_prompt = initial_prompt if initial_prompt is not None else self._SCRIPT_PRIMERS.get(language, "")
         self._script_ratio_fn = self._SCRIPT_FILTERS.get(language)
-        self._model: Any | None = None
+        self._pipe: Any | None = None
 
     @property
     def model(self) -> Any:
-        """
-        Lazy-load Whisper model.
-
-        Returns:
-            Loaded Whisper model.
-        """
-        if self._model is None:
-            self._model = whisper.load_model(self.model_name, device=self.device)
-        return self._model
+        if self._pipe is None:
+            self._pipe = hf_pipeline(
+                "automatic-speech-recognition",
+                model=self.model_name,
+                device=self.device,
+                torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
+            )
+        return self._pipe
 
     def transcribe(self, wav_path: str | Path) -> list[TranscriptSegment]:
         """
@@ -92,51 +86,48 @@ class WhisperTranscriber:
         if not audio_path.exists():
             raise FileNotFoundError(f"Audio file not found: {audio_path}")
 
-        result = self.model.transcribe(
+        result = self.model(
             str(audio_path),
-            language=self.language,
-            fp16=self.device == "cuda",
-            initial_prompt=self.initial_prompt or None,
-            condition_on_previous_text=False,
-            word_timestamps=True,
+            chunk_length_s=30,
+            stride_length_s=5,
+            return_timestamps=True,
+            generate_kwargs={
+                "language": self.language,
+                "task": "transcribe",
+            },
         )
 
-        raw_segments = result.get("segments", [])
-        if not isinstance(raw_segments, list):
-            raise RuntimeError("Whisper result did not contain a valid segments list.")
+        raw_chunks = result.get("chunks", [])
+        if not isinstance(raw_chunks, list):
+            raise RuntimeError("Pipeline result did not contain a valid chunks list.")
 
         segments: list[TranscriptSegment] = []
 
-        for raw_segment in raw_segments:
-            if not isinstance(raw_segment, dict):
+        for chunk in raw_chunks:
+            if not isinstance(chunk, dict):
                 continue
 
-            text = str(raw_segment.get("text", "")).strip()
+            text = str(chunk.get("text", "")).strip()
 
             if not text and not self.keep_empty_segments:
                 continue
 
             if self._script_ratio_fn is not None:
-                ratio = self._script_ratio_fn(text)
-                if ratio < _MALAYALAM_MIN_SCRIPT_RATIO:
+                if self._script_ratio_fn(text) < _MALAYALAM_MIN_SCRIPT_RATIO:
                     continue
 
-            start = float(raw_segment.get("start", 0.0))
-            end = float(raw_segment.get("end", start))
+            timestamp = chunk.get("timestamp") or (0.0, 0.0)
+            start = float(timestamp[0] or 0.0)
+            end = float(timestamp[1] or start)
 
             if end < start:
                 end = start
-
-            avg_logprob = _safe_optional_float(raw_segment.get("avg_logprob"))
-            no_speech_prob = _safe_optional_float(raw_segment.get("no_speech_prob"))
 
             segments.append(
                 TranscriptSegment(
                     start=start,
                     end=end,
                     text=text,
-                    avg_logprob=avg_logprob,
-                    no_speech_prob=no_speech_prob,
                 )
             )
 
@@ -144,32 +135,16 @@ class WhisperTranscriber:
 
     @staticmethod
     def _resolve_device() -> str:
-        return "cuda" if torch.cuda.is_available() else "cpu"
-
-
-def _safe_optional_float(value: Any) -> float | None:
-    if value is None:
-        return None
-
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return None
+        if torch.cuda.is_available():
+            return "cuda"
+        if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            return "mps"
+        return "cpu"
 
 
 def transcript_segments_to_dicts(
     segments: list[TranscriptSegment],
 ) -> list[dict[str, Any]]:
-    """
-    Convert transcript segments to dictionaries.
-
-    Args:
-        segments:
-            TranscriptSegment list.
-
-    Returns:
-        List of dictionaries.
-    """
     return [asdict(segment) for segment in segments]
 
 
@@ -182,35 +157,6 @@ def save_transcript_json(
     segments: list[TranscriptSegment],
     output_path: str | Path,
 ) -> Path:
-    """
-    Save transcription output to JSON.
-
-    Output structure:
-        {
-          "video_id": "...",
-          "source_path": "...",
-          "model_name": "small",
-          "language": "ml",
-          "segments": [...]
-        }
-
-    Args:
-        video_id:
-            YouTube video ID.
-        source_path:
-            Transcribed audio path.
-        model_name:
-            Whisper model name.
-        language:
-            ASR language code.
-        segments:
-            Transcript segments.
-        output_path:
-            JSON output path.
-
-    Returns:
-        Resolved output path.
-    """
     resolved_output_path = Path(output_path).expanduser().resolve()
     resolved_output_path.parent.mkdir(parents=True, exist_ok=True)
 
