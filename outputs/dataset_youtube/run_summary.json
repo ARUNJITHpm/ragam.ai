@@ -2,17 +2,18 @@
   "total_urls": 2,
   "successful_videos": 2,
   "failed_videos": 0,
-  "total_utterances": 2,
-  "total_duration_seconds": 13.68,
-  "average_utterance_duration": 6.84,
+  "total_utterances": 1,
+  "total_duration_seconds": 2.68,
+  "average_utterance_duration": 2.68,
   "split_strategy": "utterance",
   "split_warnings": [
-    "Only 1-2 unique video_id values found. Falling back to utterance-level split. This may cause leakage between train/val/test."
+    "Only 1-2 unique video_id values found. Falling back to utterance-level split. This may cause leakage between train/val/test.",
+    "Only one utterance found. Assigning it to train split."
   ],
   "splits": {
     "train_count": 1,
     "val_count": 0,
-    "test_count": 1
+    "test_count": 0
   },
   "output_paths": {
     "dataset_csv": "/Users/krishnanunni/Documents/Akhara/ragam.ai/outputs/dataset_youtube/dataset.csv",
@@ -81,66 +82,47 @@
         "json_path": "/Users/krishnanunni/Documents/Akhara/ragam.ai/outputs/dataset_youtube/transcripts/xWd9MSex8p4_segments.json",
         "model_name": "large-v3",
         "language": "ml",
-        "segment_count": 4,
+        "segment_count": 3,
         "preview": [
-          "ਮੀਸ਼ਤਮਾਈ ਕੋਵਰ ਚੇਦਦੋਰੇ ਗਾਂਦੀ ਜੀ ਆਗੋਲ ਪ੍ਰਸ਼ਸਥੀ ਲੇਕੇ ਉਯਰਨ ਕਾਜੀਂ ਚੀਰੁਂ ਨੂ.",
-          "ਕੈਂਦੀ ਜੀ ਪੱਤੁ ਮਾਸਤਿਨ ਇਲੇਕੇ ਰੈਂਡ ਵੈਟਾਂ ਮਾਨ ਗਾਂਦੀ ਜੀ ਟੈਮ ਮੈਗਸੀਂ ਦੇ ਕਾਵਰ ਇਲ ਵੈਰਿਂਦਦੇ.",
-          "ਇਲੇਕੇ ਮੈਗਸੀਂ ਮਾਨ ਗਾਂਦੀ ਜੀ ਟੈਮ ਮਾਨ ਗਾਂਦੀ ਜੀ ਟੈਮ ਮੈਗਸੀਂ ਦੇ ਕਾਵਰ ਇਲੇਕੇ ਰੈਂਡ ਵੈਰਿਂਦਦੇ.",
-          "ਮੁਸੋਲਿਂ ਦੇ ਕ੍ਸਣਾਂ ਸੁਈਗਰੀਕਰੁਦੇ."
+          "മാഹത്മാ ഗാംധിയോ ദെന് പ്രസ് വിഷ്യദമായ് കവര് ചേയ്ദ്ദോഡെ ഗാംത്ടീജീ ആഗോള്ള പ്രസ്യസ്ത്തീയ്ലെക് ഉയരുന്ന കലിഞ",
+          "അന്ന രോമേയ്ണ് രോളാങ്യുന്ന്ന് സംഭാഷ്ണത്ന്ന്നുംടിയ് ഗാംത്ടീജ്യോൽ പ്രസ്യദ്ദ്ദ് കാണിയോൽ ച്രാമ്മ്മേയ്",
+          "മ്മേയ്ണ് രോളാങ് അദ്യത്നും മുന്ന്ന്ന്ന്ന്ന് കുടുകുന്ന്ന്ന് മുസോള്ണ്ന്ന്ന് ച്രണ്ന് സീഗ്രികെരിക്ക�"
         ],
         "segments": [
           {
             "start": 0.0,
-            "end": 4.98,
-            "text": "ਮੀਸ਼ਤਮਾਈ ਕੋਵਰ ਚੇਦਦੋਰੇ ਗਾਂਦੀ ਜੀ ਆਗੋਲ ਪ੍ਰਸ਼ਸਥੀ ਲੇਕੇ ਉਯਰਨ ਕਾਜੀਂ ਚੀਰੁਂ ਨੂ.",
-            "avg_logprob": -0.3389310370551215,
-            "no_speech_prob": 0.04299863427877426
+            "end": 30.0,
+            "text": "മാഹത്മാ ഗാംധിയോ ദെന് പ്രസ് വിഷ്യദമായ് കവര് ചേയ്ദ്ദോഡെ ഗാംത്ടീജീ ആഗോള്ള പ്രസ്യസ്ത്തീയ്ലെക് ഉയരുന്ന കലിഞ",
+            "avg_logprob": -0.36323978000217017,
+            "no_speech_prob": 0.005811804439872503
           },
           {
-            "start": 4.98,
-            "end": 34.96,
-            "text": "ਕੈਂਦੀ ਜੀ ਪੱਤੁ ਮਾਸਤਿਨ ਇਲੇਕੇ ਰੈਂਡ ਵੈਟਾਂ ਮਾਨ ਗਾਂਦੀ ਜੀ ਟੈਮ ਮੈਗਸੀਂ ਦੇ ਕਾਵਰ ਇਲ ਵੈਰਿਂਦਦੇ.",
-            "avg_logprob": -0.23422541420840653,
-            "no_speech_prob": 0.0009288503206335008
+            "start": 30.0,
+            "end": 60.0,
+            "text": "അന്ന രോമേയ്ണ് രോളാങ്യുന്ന്ന് സംഭാഷ്ണത്ന്ന്നുംടിയ് ഗാംത്ടീജ്യോൽ പ്രസ്യദ്ദ്ദ് കാണിയോൽ ച്രാമ്മ്മേയ്",
+            "avg_logprob": -0.41245201350327565,
+            "no_speech_prob": 0.0005759384366683662
           },
           {
-            "start": 34.98,
-            "end": 64.96,
-            "text": "ਇਲੇਕੇ ਮੈਗਸੀਂ ਮਾਨ ਗਾਂਦੀ ਜੀ ਟੈਮ ਮਾਨ ਗਾਂਦੀ ਜੀ ਟੈਮ ਮੈਗਸੀਂ ਦੇ ਕਾਵਰ ਇਲੇਕੇ ਰੈਂਡ ਵੈਰਿਂਦਦੇ.",
-            "avg_logprob": -0.11519472458783318,
-            "no_speech_prob": 0.0004386430373415351
-          },
-          {
-            "start": 64.98,
-            "end": 94.96000000000001,
-            "text": "ਮੁਸੋਲਿਂ ਦੇ ਕ੍ਸਣਾਂ ਸੁਈਗਰੀਕਰੁਦੇ.",
-            "avg_logprob": -0.21521474333370433,
-            "no_speech_prob": 0.003167556831613183
+            "start": 60.0,
+            "end": 90.0,
+            "text": "മ്മേയ്ണ് രോളാങ് അദ്യത്നും മുന്ന്ന്ന്ന്ന്ന് കുടുകുന്ന്ന്ന് മുസോള്ണ്ന്ന്ന് ച്രണ്ന് സീഗ്രികെരിക്ക�",
+            "avg_logprob": -0.2204585909308874,
+            "no_speech_prob": 0.00041875982424244285
           }
         ],
         "error": null
       },
       "segmentation": {
         "success": true,
-        "utterance_count": 1,
-        "records": [
-          {
-            "utt_id": "xWd9MSex8p4_0000",
-            "video_id": "xWd9MSex8p4",
-            "source_url": "https://www.youtube.com/watch?v=xWd9MSex8p4",
-            "audio_path": "/Users/krishnanunni/Documents/Akhara/ragam.ai/outputs/dataset_youtube/segments/xWd9MSex8p4_0000.wav",
-            "start_sec": 0.0,
-            "end_sec": 9.97,
-            "duration_sec": 9.97,
-            "transcript": "ਮੀਸ਼ਤਮਾਈ ਕੋਵਰ ਚੇਦਦੋਰੇ ਗਾਂਦੀ ਜੀ ਆਗੋਲ ਪ੍ਰਸ਼ਸਥੀ ਲੇਕੇ ਉਯਰਨ ਕਾਜੀਂ ਚੀਰੁਂ ਨੂ."
-          }
-        ],
+        "utterance_count": 0,
+        "records": [],
         "error": null
       },
       "success": true,
       "failed_stage": null,
       "error": null,
-      "dataset_record_count": 1
+      "dataset_record_count": 0
     },
     {
       "source_url": "https://www.youtube.com/watch?v=HyWaZoOOAqY",
@@ -198,39 +180,39 @@
         "language": "ml",
         "segment_count": 4,
         "preview": [
-          "ਦੁਸੀਆਨੇਲ ਕੈਂਡੀ ਦੁਸੁਂ ਉੁ ਮੁਣੀਸ਼ੇਂ ਨੀਰ੍ਦੇਯਂ ਵੈਡੀ ਵੈਚੁ ਕੋਨ੍ਨ ਕੋਣਾਂਗਾ ।",
-          "ਇਨ੍ਦਾਨ ਆਯਲ ਇਦਿਨ ਪ੍ਰੇਰੀਪਿਚ ਦੁਨ ਕੇਵਲ ਕੋਦੁਕਂ ਪੋਲੁਂ ਅਪਰੁਸਕਤ ਮਾਗੁਂ ਦੁਨ ਵੈਰਤੀਲ ਸਰਵ ਸਾਧਾਰਣ ਮਾਈ ਰੀਕਿਨੁ ਉੁ ਉੇਸਲ ਏ ਗਨ ਕਰਾ�",
-          "ਨੀ ਰੀਟਿ ਅਰੁ ਇਡਿਰ੍ਨੀ ਵੀਡ ਉੁ ਅਧਿਕਾਰ ਥੀਅ ਪੋਲੁ, ਅਦੀਯਤੇ ਚਾਰੀ ਉੁ ਨ੍ੰ ਮੀਕਾਵਰ ਕੁੰ, ਬਰਨਗੋਡੁਦ ਤੀਲ ਉਂ ਅਲਿਂ ਦੀਨ ਓਰਙਗਲ਼ਿ ਵੀਧ�",
-          "ਅതਿ ਅതਿ ਅਦਿਰਾਲੀਗੁਂ ਨੁਂ ਮੀਦਵਾਦਿਗੁਂ ਨੁਂ ਵੱਕੇ ਬਲੀ ਅਦੁਰ੍ਪੁ ਏਰਨੁ ਅਨ੍ਨੁ ਇਕੀਲੁ ਤੀਵਰ ਵਲੁਦੁਪਸ਼ ਆਸਿਯ ਕੇਨਦਿਰਾਂਗਲੀ ਅਦੁ ਤ�"
+          "ആണ് എരുസിയോന കളിംച് ദുസ്സ് ഒരു മന്റിഷണ് നിര്ദയ്യം വടുംച് കോണ്ണക്കണ്നു എന്ദാന് ആയല ഇസ്സന്നേ പ്രേരുപ്പ്പ�",
+          "ਮੀਗਿਰੋ ਸਤਾਬਗਨ ਆਯੇ ਤੁਲ ਮੁਪਤੁਂਦੁਕਾਰਣ ਚਾਰ੍ਲੀ ਕੀਕੁਨ ਨੇ ਕੀਙ੍ ਮੇਕਰ ਅਨ ਆਨ ਰ੆ ਰੀਂਟੀ ਵੀਦੀ ਲ ਨੀ ਵੀਰੁ ਟੇਂਸ ਪਾਤਰਂ ਵੀਸ਼ੇਸ਼ �",
+          "ਵੀਰੁ ਪਰਭਾ਷ਣ ਪਰਂਬਰਕੀ ਤੇਨ ਚਾਰ੍ਲੀ ਕੀਕੁਨ ਤੋਟਕਮ ਨੇ ਦੁਂਦੁ.",
+          "ਅਦਿਨ ਨੇ ਰੈ ਰੈਸ਼ੇਦਿਰਾਲੀਗਿਲ ਨੁਂ ਮੀਦਵਾਦਿਗਿਲ ਨੁਂ ਵੈਲੇ ਅਦਰੁਪੁ ਏਰਨੁ ਇਰਨੁ ਇਕਿਲੁ ਤੀਵਰ ਵੈਲਦੁਪੁ਷ ਆਸਿਯਕੇਂਦਰਿਕਲ ਅਦ ਤੀਪੁਰ"
         ],
         "segments": [
           {
             "start": 0.0,
-            "end": 4.0,
-            "text": "ਦੁਸੀਆਨੇਲ ਕੈਂਡੀ ਦੁਸੁਂ ਉੁ ਮੁਣੀਸ਼ੇਂ ਨੀਰ੍ਦੇਯਂ ਵੈਡੀ ਵੈਚੁ ਕੋਨ੍ਨ ਕੋਣਾਂਗਾ ।",
-            "avg_logprob": -0.33495500352647567,
-            "no_speech_prob": 0.11004458367824554
+            "end": 30.0,
+            "text": "ആണ് എരുസിയോന കളിംച് ദുസ്സ് ഒരു മന്റിഷണ് നിര്ദയ്യം വടുംച് കോണ്ണക്കണ്നു എന്ദാന് ആയല ഇസ്സന്നേ പ്രേരുപ്പ്പ�",
+            "avg_logprob": -0.44763064914279516,
+            "no_speech_prob": 0.0034041875042021275
           },
           {
-            "start": 4.0,
-            "end": 34.0,
-            "text": "ਇਨ੍ਦਾਨ ਆਯਲ ਇਦਿਨ ਪ੍ਰੇਰੀਪਿਚ ਦੁਨ ਕੇਵਲ ਕੋਦੁਕਂ ਪੋਲੁਂ ਅਪਰੁਸਕਤ ਮਾਗੁਂ ਦੁਨ ਵੈਰਤੀਲ ਸਰਵ ਸਾਧਾਰਣ ਮਾਈ ਰੀਕਿਨੁ ਉੁ ਉੇਸਲ ਏ ਗਨ ਕਰਾ�",
-            "avg_logprob": -0.25562852647569445,
-            "no_speech_prob": 0.0026241065934300423
+            "start": 30.0,
+            "end": 60.0,
+            "text": "ਮੀਗਿਰੋ ਸਤਾਬਗਨ ਆਯੇ ਤੁਲ ਮੁਪਤੁਂਦੁਕਾਰਣ ਚਾਰ੍ਲੀ ਕੀਕੁਨ ਨੇ ਕੀਙ੍ ਮੇਕਰ ਅਨ ਆਨ ਰ੆ ਰੀਂਟੀ ਵੀਦੀ ਲ ਨੀ ਵੀਰੁ ਟੇਂਸ ਪਾਤਰਂ ਵੀਸ਼ੇਸ਼ �",
+            "avg_logprob": -0.3444814724392361,
+            "no_speech_prob": 0.09405333548784256
           },
           {
-            "start": 34.0,
-            "end": 64.0,
-            "text": "ਨੀ ਰੀਟਿ ਅਰੁ ਇਡਿਰ੍ਨੀ ਵੀਡ ਉੁ ਅਧਿਕਾਰ ਥੀਅ ਪੋਲੁ, ਅਦੀਯਤੇ ਚਾਰੀ ਉੁ ਨ੍ੰ ਮੀਕਾਵਰ ਕੁੰ, ਬਰਨਗੋਡੁਦ ਤੀਲ ਉਂ ਅਲਿਂ ਦੀਨ ਓਰਙਗਲ਼ਿ ਵੀਧ�",
-            "avg_logprob": -0.6216512089887543,
-            "no_speech_prob": 0.00586813036352396
+            "start": 60.0,
+            "end": 62.68,
+            "text": "ਵੀਰੁ ਪਰਭਾ਷ਣ ਪਰਂਬਰਕੀ ਤੇਨ ਚਾਰ੍ਲੀ ਕੀਕੁਨ ਤੋਟਕਮ ਨੇ ਦੁਂਦੁ.",
+            "avg_logprob": -0.21873588733074376,
+            "no_speech_prob": 0.00549941323697567
           },
           {
-            "start": 64.0,
+            "start": 62.68,
             "end": 90.0,
-            "text": "ਅതਿ ਅതਿ ਅਦਿਰਾਲੀਗੁਂ ਨੁਂ ਮੀਦਵਾਦਿਗੁਂ ਨੁਂ ਵੱਕੇ ਬਲੀ ਅਦੁਰ੍ਪੁ ਏਰਨੁ ਅਨ੍ਨੁ ਇਕੀਲੁ ਤੀਵਰ ਵਲੁਦੁਪਸ਼ ਆਸਿਯ ਕੇਨਦਿਰਾਂਗਲੀ ਅਦੁ ਤ�",
-            "avg_logprob": -0.3411885918511285,
-            "no_speech_prob": 0.18844327330589294
+            "text": "ਅਦਿਨ ਨੇ ਰੈ ਰੈਸ਼ੇਦਿਰਾਲੀਗਿਲ ਨੁਂ ਮੀਦਵਾਦਿਗਿਲ ਨੁਂ ਵੈਲੇ ਅਦਰੁਪੁ ਏਰਨੁ ਇਰਨੁ ਇਕਿਲੁ ਤੀਵਰ ਵੈਲਦੁਪੁ਷ ਆਸਿਯਕੇਂਦਰਿਕਲ ਅਦ ਤੀਪੁਰ",
+            "avg_logprob": -0.2567113525664325,
+            "no_speech_prob": 0.006671995390206575
           }
         ],
         "error": null
@@ -244,10 +226,10 @@
             "video_id": "HyWaZoOOAqY",
             "source_url": "https://www.youtube.com/watch?v=HyWaZoOOAqY",
             "audio_path": "/Users/krishnanunni/Documents/Akhara/ragam.ai/outputs/dataset_youtube/segments/HyWaZoOOAqY_0000.wav",
-            "start_sec": 0.0,
-            "end_sec": 3.71,
-            "duration_sec": 3.71,
-            "transcript": "ਦੁਸੀਆਨੇਲ ਕੈਂਡੀ ਦੁਸੁਂ ਉੁ ਮੁਣੀਸ਼ੇਂ ਨੀਰ੍ਦੇਯਂ ਵੈਡੀ ਵੈਚੁ ਕੋਨ੍ਨ ਕੋਣਾਂਗਾ ।"
+            "start_sec": 60.0,
+            "end_sec": 62.68,
+            "duration_sec": 2.68,
+            "transcript": "ਵੀਰੁ ਪਰਭਾ਷ਣ ਪਰਂਬਰਕੀ ਤੇਨ ਚਾਰ੍ਲੀ ਕੀਕੁਨ ਤੋਟਕਮ ਨੇ ਦੁਂਦੁ."
           }
         ],
         "error": null
