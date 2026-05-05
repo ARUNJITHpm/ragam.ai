@@ -25,8 +25,8 @@ asr:
   # whisper_model: "base"
   # whisper_model: "small"
   # whisper_model: "medium"
-  # whisper_model: "large-v3"
-  whisper_model: "tiny"
+  whisper_model: "large-v3"
+  # whisper_model: "tiny"
 
   language: "ml"
   keep_empty_segments: false
@@ -61,7 +61,7 @@ split:
 runtime:
   # Keep false for normal runs.
   # Use CLI --overwrite only when you intentionally want to regenerate trims/segments.
-  overwrite_outputs: false
+  overwrite_outputs: true
 
   # Important: avoids repeated YouTube downloads and reduces 429 risk.
   reuse_existing_audio: true

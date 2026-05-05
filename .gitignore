@@ -29,18 +29,18 @@ env/
 Thumbs.db
 
 # Outputs / data
-outputs/
-data/
-cookies/*.txt
-logs/
-*.log
+# outputs/
+# data/
+# cookies/*.txt
+# logs/
+# *.log
 
 # Media
-*.wav
-*.mp3
-*.mp4
-*.m4a
-*.webm
+# *.wav
+# *.mp3
+# *.mp4
+# *.m4a
+# *.webm
 
 # Model/cache files
 .cache/
