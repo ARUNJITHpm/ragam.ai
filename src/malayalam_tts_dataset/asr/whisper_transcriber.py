@@ -25,6 +25,22 @@ _MALAYALAM_MIN_SCRIPT_RATIO = 0.5
 # Gap between words (seconds) that triggers a new segment
 _WORD_GAP_SPLIT_SEC = 0.8
 
+# Standard alignment heads per Whisper model size (decoder layer count → size).
+# Fine-tuned models often omit these from their generation config; we patch them
+# in so that return_timestamps="word" works correctly.
+_DECODER_LAYERS_TO_SIZE = {4: "tiny", 6: "base", 12: "small", 24: "medium", 32: "large"}
+_ALIGNMENT_HEADS: dict[str, list[list[int]]] = {
+    "tiny":   [[2, 2], [3, 0], [3, 2], [3, 4], [3, 5], [3, 7],
+               [3, 8], [3, 9], [3, 10], [3, 11], [3, 12], [3, 13]],
+    "base":   [[3, 1], [4, 2], [4, 5], [4, 7], [5, 1], [5, 2], [5, 4], [5, 6]],
+    "small":  [[1, 0], [2, 6], [2, 8], [3, 5], [3, 6], [4, 3],
+               [4, 5], [4, 7], [5, 1], [5, 3], [5, 5]],
+    "medium": [[11, 4], [14, 1], [14, 14], [15, 4],
+               [13, 13], [13, 7], [13, 5], [14, 7]],
+    "large":  [[9, 19], [11, 2], [11, 4], [12, 0], [12, 6],
+               [13, 2], [13, 6], [14, 0], [14, 7], [15, 0], [15, 6]],
+}
+
 
 def _malayalam_script_ratio(text: str) -> float:
     chars = [c for c in text if not c.isspace()]
@@ -72,7 +88,24 @@ class WhisperTranscriber:
                 device=self.device,
                 torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
             )
+            self._patch_alignment_heads()
         return self._pipe
+
+    def _patch_alignment_heads(self) -> None:
+        """Inject alignment_heads if the model's generation config omits them.
+
+        Fine-tuned Whisper models (e.g. thennal/whisper-medium-ml) are often
+        saved without alignment_heads, which are required for word-level
+        timestamps.  We detect the model size from decoder_layers and apply
+        the standard OpenAI heads for that size.
+        """
+        gen_config = self._pipe.model.generation_config
+        if getattr(gen_config, "alignment_heads", None):
+            return
+
+        num_layers = getattr(self._pipe.model.config, "decoder_layers", None)
+        size = _DECODER_LAYERS_TO_SIZE.get(num_layers, "medium")
+        gen_config.alignment_heads = _ALIGNMENT_HEADS[size]
 
     def transcribe(self, wav_path: str | Path) -> list[TranscriptSegment]:
         """
