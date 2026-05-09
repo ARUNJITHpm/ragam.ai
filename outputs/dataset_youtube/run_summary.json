@@ -1,17 +1,16 @@
 {
   "total_urls": 2,
-  "successful_videos": 2,
-  "failed_videos": 0,
-  "total_utterances": 1,
-  "total_duration_seconds": 3.2,
-  "average_utterance_duration": 3.2,
-  "split_strategy": "utterance",
+  "successful_videos": 0,
+  "failed_videos": 2,
+  "total_utterances": 0,
+  "total_duration_seconds": 0,
+  "average_utterance_duration": 0.0,
+  "split_strategy": "empty",
   "split_warnings": [
-    "Only 1-2 unique video_id values found. Falling back to utterance-level split. This may cause leakage between train/val/test.",
-    "Only one utterance found. Assigning it to train split."
+    "No records available to split."
   ],
   "splits": {
-    "train_count": 1,
+    "train_count": 0,
     "val_count": 0,
     "test_count": 0
   },
@@ -26,7 +25,20 @@
     "test_metadata_csv": "/Users/raman/datascience/sound/ragam.ai/outputs/dataset_youtube/test_metadata.csv",
     "run_summary": "/Users/raman/datascience/sound/ragam.ai/outputs/dataset_youtube/run_summary.json"
   },
-  "errors": [],
+  "errors": [
+    {
+      "source_url": "https://www.youtube.com/watch?v=xWd9MSex8p4",
+      "video_id": "xWd9MSex8p4",
+      "stage": "transcription",
+      "error": "Model generation config has no `alignment_heads`, token-level timestamps not available. See https://gist.github.com/hollance/42e32852f24243b748ae6bc1f985b13a on how to add this property to the generation config."
+    },
+    {
+      "source_url": "https://www.youtube.com/watch?v=HyWaZoOOAqY",
+      "video_id": "HyWaZoOOAqY",
+      "stage": "transcription",
+      "error": "Model generation config has no `alignment_heads`, token-level timestamps not available. See https://gist.github.com/hollance/42e32852f24243b748ae6bc1f985b13a on how to add this property to the generation config."
+    }
+  ],
   "video_results": [
     {
       "source_url": "https://www.youtube.com/watch?v=xWd9MSex8p4",
@@ -77,35 +89,11 @@
         "warnings": [],
         "errors": []
       },
-      "transcription": {
-        "success": true,
-        "json_path": "/Users/raman/datascience/sound/ragam.ai/outputs/dataset_youtube/transcripts/xWd9MSex8p4_segments.json",
-        "model_name": "thennal/whisper-medium-ml",
-        "language": "ml",
-        "segment_count": 1,
-        "preview": [
-          "പ്രസ്സ് വിശദമായി കവർ ചെയ്തതോടെ ഗാന്ധിജി ആഗോള പ്രശസ്തിയിലേക്ക് ഉയർന്നുകഴിഞ്ഞിരുന്നു കഴിഞ്ഞ പത്തുമാസത്തിനടക്ക് രണ്ട് വട്ടമാണ് ഗാന്ധിജി ടൈംബ് മാഗസിന്റെ കവറിൽ വരുന്നത് 1931-ലെ ടൈംസ് മാൻ ഓഫ് ദി യേറും മഹാത്മാഗാന്ധി തനർദ്ധനഗ്ദനനായ ആ ഫഖീറിനെ സെന്റ് ഗാന്ധിയെ കാണാൻ ജനങ്ങൾ തടിച്ചുകൂടുമായിരുന്നുഅന്ന് റൊമൈൻ റോളാങ്ങിനോട് സംഭാഷത്തിനിടക്ക് ഗാന്ധിജി പറഞ്ഞു ഇഫ് ദി പോപ്പ് വാണ്ട്സ് ടു സീ മി ഐ ഷാൽ ഗോ ആസ് ഫോൾ മുസോലിനെ ഐ ഡുനോട് തിങ്ക് ഹീ വാണ്ട്സ് ടു സീ മി ബട്ട് ഇഫ് ഇഫ് ഡസ് ഐ ഷാൽ ഗോ വിതോട്ട് ഹെസിറ്റേഷൻ ബട്ട് ഇറ്റ് വിൽ നോട്ട് ബി ഇൻ സീക്രട്ട് പോപ്പിനെ എന്നെ കാണണമെന്നുണ്ടെങ്കിൽ ഞാൻ കാണാൻ ചെല്ലും മുസോളിയുടെ കാര്യമാണെങ്കിൽ അദ്ദേഹത്തിനെ എന്നെ കാണണമെന്നുണ്ാൻ ഉദ്ദേശിക്കുത്തില്ല ഗാന്ധിജി അന്ന് അങ്ങനെ പറഞ്ഞപ്പോൾ റൊമൈൻ റോളങ് അദ്ദേഹത്തിന് ഒരു മുൻവറിയിപ്പ് കൊടുക്കുന്നുണ്ട് മുസോലിനിയുടെ ക്ഷണം സ്വീകരിക്കരുത് അയാൾക്കു ചുറ്റും ഫാഷിസ്റ്റുകൾ മാത്രമേ കാണു റോളം സ്ന�"
-        ],
-        "segments": [
-          {
-            "start": 0.0,
-            "end": 0.0,
-            "text": "പ്രസ്സ് വിശദമായി കവർ ചെയ്തതോടെ ഗാന്ധിജി ആഗോള പ്രശസ്തിയിലേക്ക് ഉയർന്നുകഴിഞ്ഞിരുന്നു കഴിഞ്ഞ പത്തുമാസത്തിനടക്ക് രണ്ട് വട്ടമാണ് ഗാന്ധിജി ടൈംബ് മാഗസിന്റെ കവറിൽ വരുന്നത് 1931-ലെ ടൈംസ് മാൻ ഓഫ് ദി യേറും മഹാത്മാഗാന്ധി തനർദ്ധനഗ്ദനനായ ആ ഫഖീറിനെ സെന്റ് ഗാന്ധിയെ കാണാൻ ജനങ്ങൾ തടിച്ചുകൂടുമായിരുന്നുഅന്ന് റൊമൈൻ റോളാങ്ങിനോട് സംഭാഷത്തിനിടക്ക് ഗാന്ധിജി പറഞ്ഞു ഇഫ് ദി പോപ്പ് വാണ്ട്സ് ടു സീ മി ഐ ഷാൽ ഗോ ആസ് ഫോൾ മുസോലിനെ ഐ ഡുനോട് തിങ്ക് ഹീ വാണ്ട്സ് ടു സീ മി ബട്ട് ഇഫ് ഇഫ് ഡസ് ഐ ഷാൽ ഗോ വിതോട്ട് ഹെസിറ്റേഷൻ ബട്ട് ഇറ്റ് വിൽ നോട്ട് ബി ഇൻ സീക്രട്ട് പോപ്പിനെ എന്നെ കാണണമെന്നുണ്ടെങ്കിൽ ഞാൻ കാണാൻ ചെല്ലും മുസോളിയുടെ കാര്യമാണെങ്കിൽ അദ്ദേഹത്തിനെ എന്നെ കാണണമെന്നുണ്ാൻ ഉദ്ദേശിക്കുത്തില്ല ഗാന്ധിജി അന്ന് അങ്ങനെ പറഞ്ഞപ്പോൾ റൊമൈൻ റോളങ് അദ്ദേഹത്തിന് ഒരു മുൻവറിയിപ്പ് കൊടുക്കുന്നുണ്ട് മുസോലിനിയുടെ ക്ഷണം സ്വീകരിക്കരുത് അയാൾക്കു ചുറ്റും ഫാഷിസ്റ്റുകൾ മാത്രമേ കാണു റോളം സ്ന�",
-            "avg_logprob": null,
-            "no_speech_prob": null
-          }
-        ],
-        "error": null
-      },
-      "segmentation": {
-        "success": true,
-        "utterance_count": 0,
-        "records": [],
-        "error": null
-      },
-      "success": true,
-      "failed_stage": null,
-      "error": null,
+      "transcription": null,
+      "segmentation": null,
+      "success": false,
+      "failed_stage": "transcription",
+      "error": "Model generation config has no `alignment_heads`, token-level timestamps not available. See https://gist.github.com/hollance/42e32852f24243b748ae6bc1f985b13a on how to add this property to the generation config.",
       "dataset_record_count": 0
     },
     {
@@ -157,55 +145,12 @@
         "warnings": [],
         "errors": []
       },
-      "transcription": {
-        "success": true,
-        "json_path": "/Users/raman/datascience/sound/ragam.ai/outputs/dataset_youtube/transcripts/HyWaZoOOAqY_segments.json",
-        "model_name": "thennal/whisper-medium-ml",
-        "language": "ml",
-        "segment_count": 2,
-        "preview": [
-          "ലൂസിയാനയിൽ കഴിഞ്ഞ ദിവസം ഒരു മനുഷ്യൻ നിർദ്ദയം വെടിവെച്ച് കൊന്നുനിന്നത് എന്താണ് അയാള് ഇതിനെ പ്രേരിപ്പിച്ചതെന്ന് കേവല കോതുവം പോലും അപ്രസക്തമാകുന്ന തരത്തിൽ സർവസാധാരണമായിരിക്കുന്നു യുഎസ്സിലെ ഗൺക്രൈം അമേരിക്കര്രോപറി പ്രസിഡൻറ് ഡോണൽ ട്രംപിന്റെ വലംകൈയുമായിരുന്നു ചാർലി കിർക്ക് 2016-ലും ഇരുപത്തിനാലിലും ട്രംബിന്റെ വിജയത്തിന്റെ ചാരലേക്ക് ശക്തിയായ ടിപി യുഎസ്എ അഥവാ ടേണ്ടിപ്പോയിൻറ്റ് യുഎസ്എ എന്ന എൻജിയോയുടെ സ്ഥാപകനായിട്ടേഹത്തെ ചാരി നിന്ന് മിക്കവർക്കും ഭരണകൂടത്തിലും അതിൻറെ ഓരങ്ങളിലും വലിയ സ്ഥാനങ്ങൾ ലഭിച്ചപ്പോൾ അത്രും കേവല പദുവികളിൽ സ്വയം തളക്കപ്പെടാൻ ചാർളി ആഗ്രഹിച്ചില്ല അതിനേക്കാളൊക്കെ അപ്രോത്ത് ആയിരുന്നു അയാളുടെ നോട്ഒരു പ്രഭാഷണ പരമ്പരക്ക് തന്നെ ചാർലിക്കർക്ക് തുടക്കുമിടുന്നത്അതിന് നേരെ രാഷ്യ എദ്രാളികളിൽ നിന്നും വിധവാദികളിൽ നിന്നും ഒക്കെ വലിയ എതിർപ്പുയർന്നുവെങ്കിലുംതീവ്ര വലുവശ ആശയ കേന്ദ്രങ്ങളിൽ അത് തീപുരി വിതരി",
-          "രണ്ടായിരത്തി രുപത്തിയഞ്ച് സെപ്റ്റംബർ പത്തിന് കീർക്കും കൂട്ടുവും യൂട്ടാവാലി യൂണിവേഴ്സിറ്റിയിൽ സംഘടിപ്പിച്ച പരിപാടിയിലേക്ക് മൂവായിരത്തിലേറെ വിദ്യാർത്ഥികളാണ് ഒഴുകിയെത്തിയത് ഉച്ചയ്ക്ക് പതിന്ന് ഒൻപതിന് ചാർലിക�"
-        ],
-        "segments": [
-          {
-            "start": 67.88,
-            "end": 71.08,
-            "text": "ലൂസിയാനയിൽ കഴിഞ്ഞ ദിവസം ഒരു മനുഷ്യൻ നിർദ്ദയം വെടിവെച്ച് കൊന്നുനിന്നത് എന്താണ് അയാള് ഇതിനെ പ്രേരിപ്പിച്ചതെന്ന് കേവല കോതുവം പോലും അപ്രസക്തമാകുന്ന തരത്തിൽ സർവസാധാരണമായിരിക്കുന്നു യുഎസ്സിലെ ഗൺക്രൈം അമേരിക്കര്രോപറി പ്രസിഡൻറ് ഡോണൽ ട്രംപിന്റെ വലംകൈയുമായിരുന്നു ചാർലി കിർക്ക് 2016-ലും ഇരുപത്തിനാലിലും ട്രംബിന്റെ വിജയത്തിന്റെ ചാരലേക്ക് ശക്തിയായ ടിപി യുഎസ്എ അഥവാ ടേണ്ടിപ്പോയിൻറ്റ് യുഎസ്എ എന്ന എൻജിയോയുടെ സ്ഥാപകനായിട്ടേഹത്തെ ചാരി നിന്ന് മിക്കവർക്കും ഭരണകൂടത്തിലും അതിൻറെ ഓരങ്ങളിലും വലിയ സ്ഥാനങ്ങൾ ലഭിച്ചപ്പോൾ അത്രും കേവല പദുവികളിൽ സ്വയം തളക്കപ്പെടാൻ ചാർളി ആഗ്രഹിച്ചില്ല അതിനേക്കാളൊക്കെ അപ്രോത്ത് ആയിരുന്നു അയാളുടെ നോട്ഒരു പ്രഭാഷണ പരമ്പരക്ക് തന്നെ ചാർലിക്കർക്ക് തുടക്കുമിടുന്നത്അതിന് നേരെ രാഷ്യ എദ്രാളികളിൽ നിന്നും വിധവാദികളിൽ നിന്നും ഒക്കെ വലിയ എതിർപ്പുയർന്നുവെങ്കിലുംതീവ്ര വലുവശ ആശയ കേന്ദ്രങ്ങളിൽ അത് തീപുരി വിതരി",
-            "avg_logprob": null,
-            "no_speech_prob": null
-          },
-          {
-            "start": 71.08,
-            "end": 71.08,
-            "text": "രണ്ടായിരത്തി രുപത്തിയഞ്ച് സെപ്റ്റംബർ പത്തിന് കീർക്കും കൂട്ടുവും യൂട്ടാവാലി യൂണിവേഴ്സിറ്റിയിൽ സംഘടിപ്പിച്ച പരിപാടിയിലേക്ക് മൂവായിരത്തിലേറെ വിദ്യാർത്ഥികളാണ് ഒഴുകിയെത്തിയത് ഉച്ചയ്ക്ക് പതിന്ന് ഒൻപതിന് ചാർലിക�",
-            "avg_logprob": null,
-            "no_speech_prob": null
-          }
-        ],
-        "error": null
-      },
-      "segmentation": {
-        "success": true,
-        "utterance_count": 1,
-        "records": [
-          {
-            "utt_id": "HyWaZoOOAqY_0000",
-            "video_id": "HyWaZoOOAqY",
-            "source_url": "https://www.youtube.com/watch?v=HyWaZoOOAqY",
-            "audio_path": "/Users/raman/datascience/sound/ragam.ai/outputs/dataset_youtube/segments/HyWaZoOOAqY_0000.wav",
-            "start_sec": 67.88,
-            "end_sec": 71.08,
-            "duration_sec": 3.2,
-            "transcript": "ലൂസിയാനയിൽ കഴിഞ്ഞ ദിവസം ഒരു മനുഷ്യൻ നിർദ്ദയം വെടിവെച്ച് കൊന്നുനിന്നത് എന്താണ് അയാള് ഇതിനെ പ്രേരിപ്പിച്ചതെന്ന് കേവല കോതുവം പോലും അപ്രസക്തമാകുന്ന തരത്തിൽ സർവസാധാരണമായിരിക്കുന്നു യുഎസ്സിലെ ഗൺക്രൈം അമേരിക്കര്രോപറി പ്രസിഡൻറ് ഡോണൽ ട്രംപിന്റെ വലംകൈയുമായിരുന്നു ചാർലി കിർക്ക് 2016-ലും ഇരുപത്തിനാലിലും ട്രംബിന്റെ വിജയത്തിന്റെ ചാരലേക്ക് ശക്തിയായ ടിപി യുഎസ്എ അഥവാ ടേണ്ടിപ്പോയിൻറ്റ് യുഎസ്എ എന്ന എൻജിയോയുടെ സ്ഥാപകനായിട്ടേഹത്തെ ചാരി നിന്ന് മിക്കവർക്കും ഭരണകൂടത്തിലും അതിൻറെ ഓരങ്ങളിലും വലിയ സ്ഥാനങ്ങൾ ലഭിച്ചപ്പോൾ അത്രും കേവല പദുവികളിൽ സ്വയം തളക്കപ്പെടാൻ ചാർളി ആഗ്രഹിച്ചില്ല അതിനേക്കാളൊക്കെ അപ്രോത്ത് ആയിരുന്നു അയാളുടെ നോട്ഒരു പ്രഭാഷണ പരമ്പരക്ക് തന്നെ ചാർലിക്കർക്ക് തുടക്കുമിടുന്നത്അതിന് നേരെ രാഷ്യ എദ്രാളികളിൽ നിന്നും വിധവാദികളിൽ നിന്നും ഒക്കെ വലിയ എതിർപ്പുയർന്നുവെങ്കിലുംതീവ്ര വലുവശ ആശയ കേന്ദ്രങ്ങളിൽ അത് തീപുരി വിതരി"
-          }
-        ],
-        "error": null
-      },
-      "success": true,
-      "failed_stage": null,
-      "error": null,
-      "dataset_record_count": 1
+      "transcription": null,
+      "segmentation": null,
+      "success": false,
+      "failed_stage": "transcription",
+      "error": "Model generation config has no `alignment_heads`, token-level timestamps not available. See https://gist.github.com/hollance/42e32852f24243b748ae6bc1f985b13a on how to add this property to the generation config.",
+      "dataset_record_count": 0
     }
   ]
 }
