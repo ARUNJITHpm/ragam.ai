@@ -22,6 +22,9 @@ _MALAYALAM_UNICODE_START = 0x0D00
 _MALAYALAM_UNICODE_END = 0x0D7F
 _MALAYALAM_MIN_SCRIPT_RATIO = 0.5
 
+# Gap between words (seconds) that triggers a new segment
+_WORD_GAP_SPLIT_SEC = 0.8
+
 
 def _malayalam_script_ratio(text: str) -> float:
     chars = [c for c in text if not c.isspace()]
@@ -73,7 +76,12 @@ class WhisperTranscriber:
 
     def transcribe(self, wav_path: str | Path) -> list[TranscriptSegment]:
         """
-        Transcribe one audio file.
+        Transcribe one audio file, returning utterance-level segments.
+
+        Uses word-level timestamps from the pipeline and groups words into
+        utterance segments by pause gaps and sentence-ending punctuation.
+        This handles models (e.g. thennal/whisper-medium-ml) that return
+        a single chunk with null timestamps in segment mode.
 
         Args:
             wav_path:
@@ -90,48 +98,101 @@ class WhisperTranscriber:
             str(audio_path),
             chunk_length_s=30,
             stride_length_s=5,
-            return_timestamps=True,
+            return_timestamps="word",
             generate_kwargs={
                 "language": self.language,
                 "task": "transcribe",
             },
         )
 
-        raw_chunks = result.get("chunks", [])
-        if not isinstance(raw_chunks, list):
+        word_chunks = result.get("chunks", [])
+        if not isinstance(word_chunks, list):
             raise RuntimeError("Pipeline result did not contain a valid chunks list.")
 
-        segments: list[TranscriptSegment] = []
+        segments = self._group_words_into_segments(word_chunks)
+        return segments
 
-        for chunk in raw_chunks:
+    def _group_words_into_segments(
+        self, word_chunks: list[dict[str, Any]]
+    ) -> list[TranscriptSegment]:
+        """
+        Group word-level chunks into utterance segments.
+
+        Splits on:
+        - Pause gap between consecutive words >= _WORD_GAP_SPLIT_SEC
+        - Sentence-ending punctuation (. ! ? । ॥)
+        """
+        segments: list[TranscriptSegment] = []
+        current_words: list[str] = []
+        current_start: float | None = None
+        current_end: float = 0.0
+        prev_end: float = 0.0
+
+        sentence_endings = {".", "!", "?", "।", "॥"}
+
+        for chunk in word_chunks:
             if not isinstance(chunk, dict):
                 continue
 
             text = str(chunk.get("text", "")).strip()
-
-            if not text and not self.keep_empty_segments:
+            if not text:
                 continue
 
-            if self._script_ratio_fn is not None:
-                if self._script_ratio_fn(text) < _MALAYALAM_MIN_SCRIPT_RATIO:
-                    continue
+            ts = chunk.get("timestamp") or (None, None)
+            word_start = float(ts[0]) if ts[0] is not None else prev_end
+            word_end = float(ts[1]) if ts[1] is not None else word_start
 
-            timestamp = chunk.get("timestamp") or (0.0, 0.0)
-            start = float(timestamp[0] or 0.0)
-            end = float(timestamp[1] or start)
+            gap = word_start - prev_end if current_words else 0.0
+            ends_sentence = any(text.endswith(p) for p in sentence_endings)
+            split_on_gap = gap >= _WORD_GAP_SPLIT_SEC and current_words
 
-            if end < start:
-                end = start
+            if split_on_gap:
+                seg = self._flush_segment(current_words, current_start, current_end)
+                if seg:
+                    segments.append(seg)
+                current_words = []
+                current_start = None
 
-            segments.append(
-                TranscriptSegment(
-                    start=start,
-                    end=end,
-                    text=text,
-                )
-            )
+            if current_start is None:
+                current_start = word_start
+
+            current_words.append(text)
+            current_end = word_end
+            prev_end = word_end
+
+            if ends_sentence and current_words:
+                seg = self._flush_segment(current_words, current_start, current_end)
+                if seg:
+                    segments.append(seg)
+                current_words = []
+                current_start = None
+
+        if current_words:
+            seg = self._flush_segment(current_words, current_start, current_end)
+            if seg:
+                segments.append(seg)
+
+        if self._script_ratio_fn is not None:
+            segments = [
+                s for s in segments
+                if self._script_ratio_fn(s.text) >= _MALAYALAM_MIN_SCRIPT_RATIO
+                or self.keep_empty_segments
+            ]
 
         return segments
+
+    def _flush_segment(
+        self,
+        words: list[str],
+        start: float | None,
+        end: float,
+    ) -> TranscriptSegment | None:
+        text = " ".join(words).strip()
+        if not text and not self.keep_empty_segments:
+            return None
+        seg_start = start if start is not None else 0.0
+        seg_end = max(end, seg_start)
+        return TranscriptSegment(start=seg_start, end=seg_end, text=text)
 
     @staticmethod
     def _resolve_device() -> str:
