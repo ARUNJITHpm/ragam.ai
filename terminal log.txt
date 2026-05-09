@@ -1,0 +1,228 @@
+mbappe) ramans-MacBook-Air:ragam.ai raman$ python3 scripts/run_dataset_build.py 
+2026-05-09 23:15:51,745 | INFO     | __main__ | Starting Malayalam TTS Dataset Builder
+2026-05-09 23:15:51,745 | INFO     | __main__ | Config path: configs/default.yaml
+2026-05-09 23:15:51,745 | INFO     | __main__ | Overwrite: False
+2026-05-09 23:15:51,760 | INFO     | malayalam_tts_dataset.pipeline.build_dataset | Starting dataset build pipeline
+2026-05-09 23:15:51,760 | INFO     | malayalam_tts_dataset.pipeline.build_dataset | Output directory: /Users/raman/datascience/sound/ragam.ai/outputs/dataset_youtube
+2026-05-09 23:15:51,760 | INFO     | malayalam_tts_dataset.pipeline.build_dataset | ==========================================================================================
+2026-05-09 23:15:51,760 | INFO     | malayalam_tts_dataset.pipeline.build_dataset | Processing URL 1/2: https://www.youtube.com/watch?v=xWd9MSex8p4
+2026-05-09 23:15:51,760 | INFO     | malayalam_tts_dataset.pipeline.build_dataset | Using existing WAV: /Users/raman/datascience/sound/ragam.ai/outputs/dataset_youtube/audio_full/xWd9MSex8p4.wav
+2026-05-09 23:15:52,030 | INFO     | malayalam_tts_dataset.pipeline.build_dataset | Full audio validation successful
+2026-05-09 23:15:52,312 | INFO     | malayalam_tts_dataset.pipeline.build_dataset | Trim successful: /Users/raman/datascience/sound/ragam.ai/outputs/dataset_youtube/audio_trimmed/xWd9MSex8p4_trimmed.wav
+2026-05-09 23:15:52,323 | INFO     | malayalam_tts_dataset.pipeline.build_dataset | Trimmed audio validation successful
+2026-05-09 23:15:52,721 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/thennal/whisper-medium-ml/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-05-09 23:15:52,759 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/thennal/whisper-medium-ml/139797930d5942280c03cdeb9a780540a4f4ab0f/config.json "HTTP/1.1 200 OK"
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+2026-05-09 23:15:53,101 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/thennal/whisper-medium-ml/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-05-09 23:15:53,101 | WARNING  | huggingface_hub.utils._http | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights: 100%|█████████████████████████████████████| 947/947 [00:00<00:00, 69683.09it/s]
+2026-05-09 23:15:53,396 | INFO     | httpx | HTTP Request: GET https://huggingface.co/api/models/thennal/whisper-medium-ml "HTTP/1.1 200 OK"
+2026-05-09 23:15:53,713 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/thennal/whisper-medium-ml/resolve/main/generation_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-05-09 23:15:53,714 | INFO     | httpx | HTTP Request: GET https://huggingface.co/api/models/thennal/whisper-medium-ml/commits/main "HTTP/1.1 200 OK"
+2026-05-09 23:15:53,740 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/thennal/whisper-medium-ml/139797930d5942280c03cdeb9a780540a4f4ab0f/generation_config.json "HTTP/1.1 200 OK"
+2026-05-09 23:15:54,000 | INFO     | httpx | HTTP Request: GET https://huggingface.co/api/models/thennal/whisper-medium-ml/discussions?p=0 "HTTP/1.1 200 OK"
+2026-05-09 23:15:54,017 | INFO     | httpx | HTTP Request: GET https://huggingface.co/api/models/thennal/whisper-medium-ml/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-05-09 23:15:54,297 | INFO     | httpx | HTTP Request: GET https://huggingface.co/api/models/thennal/whisper-medium-ml/commits/refs%2Fpr%2F4 "HTTP/1.1 200 OK"
+2026-05-09 23:15:54,309 | INFO     | httpx | HTTP Request: GET https://huggingface.co/api/models/thennal/whisper-medium-ml/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-05-09 23:15:54,579 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/thennal/whisper-medium-ml/resolve/refs%2Fpr%2F4/model.safetensors.index.json "HTTP/1.1 404 Not Found"
+2026-05-09 23:15:54,625 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/thennal/whisper-medium-ml/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-05-09 23:15:54,854 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/thennal/whisper-medium-ml/resolve/refs%2Fpr%2F4/model.safetensors "HTTP/1.1 302 Found"
+2026-05-09 23:15:54,907 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/thennal/whisper-medium-ml/resolve/main/preprocessor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-05-09 23:15:54,936 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/thennal/whisper-medium-ml/139797930d5942280c03cdeb9a780540a4f4ab0f/preprocessor_config.json "HTTP/1.1 200 OK"
+2026-05-09 23:15:55,246 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/thennal/whisper-medium-ml/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-05-09 23:15:55,558 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/thennal/whisper-medium-ml/resolve/main/preprocessor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-05-09 23:15:55,588 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/thennal/whisper-medium-ml/139797930d5942280c03cdeb9a780540a4f4ab0f/preprocessor_config.json "HTTP/1.1 200 OK"
+2026-05-09 23:15:55,869 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/thennal/whisper-medium-ml/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-05-09 23:15:56,156 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/thennal/whisper-medium-ml/resolve/main/preprocessor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-05-09 23:15:56,196 | INFO     | httpx | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/thennal/whisper-medium-ml/139797930d5942280c03cdeb9a780540a4f4ab0f/preprocessor_config.json "HTTP/1.1 200 OK"
+[transformers] Using `chunk_length_s` is very experimental with seq2seq models. The results will not necessarily be entirely accurate and will have caveats. More information: https://github.com/huggingface/transformers/pull/20104. Ignore this warning with pipeline(..., ignore_warning=True). To use Whisper for long-form transcription, use rather the model's `generate` method directly as the model relies on it's own chunking mechanism (cf. Whisper original paper, section 3.8. Long-form Transcription).
+[transformers] A custom logits processor of type <class 'transformers.generation.logits_process.SuppressTokensLogitsProcessor'> has been passed to `.generate()`, but it was also created in `.generate()`, given its parameterization. The custom <class 'transformers.generation.logits_process.SuppressTokensLogitsProcessor'> will take precedence. Please check the docstring of <class 'transformers.generation.logits_process.SuppressTokensLogitsProcessor'> to see related `.generate()` flags.
+[transformers] A custom logits processor of type <class 'transformers.generation.logits_process.SuppressTokensAtBeginLogitsProcessor'> has been passed to `.generate()`, but it was also created in `.generate()`, given its parameterization. The custom <class 'transformers.generation.logits_process.SuppressTokensAtBeginLogitsProcessor'> will take precedence. Please check the docstring of <class 'transformers.generation.logits_process.SuppressTokensAtBeginLogitsProcessor'> to see related `.generate()` flags.
+2026-05-09 23:17:22.116 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_21-3912223477‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:22.136 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_22-1764008321‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:22.151 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_22-2704866196‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:22.183 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_22-2822332397‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:22.866 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_22-784989430‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:22.876 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_22-3961411707‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:22.888 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_22-1455744665‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:22.899 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_22-2643829737‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.042 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-3053886687‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.051 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-2352301858‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.201 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-3387683753‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.218 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-221876106‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.233 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-1936935489‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.266 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-1361080409‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.336 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-2596659997‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.350 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-2637601454‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.365 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-3159143798‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.381 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-3685921687‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.388 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-2452634068‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.394 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-684497272‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.521 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-3160003139‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.536 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-3379701367‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.549 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-2803306204‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.578 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-213167197‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.647 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-776745610‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.666 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-1239382701‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.677 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-3613692967‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.686 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-578018287‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.698 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-3795573315‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.711 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-826407885‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.719 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-2803797894‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.725 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-3751051088‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.851 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-3718728603‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.869 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-1105664063‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.885 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-367259723‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:23.945 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_23-3080249951‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.035 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-1765638148‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.048 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-882629796‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.324 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-2837822194‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.334 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-3709374367‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.346 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-4120575424‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.354 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-3971572726‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.370 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-3451240689‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.507 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-139269310‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.518 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-3600972054‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.530 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-1867488751‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.558 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-2647689571‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.633 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-2234785215‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.644 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-3675931823‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.657 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-3530104113‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.667 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-3924570211‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.673 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-2041215720‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.680 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-1128594789‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.807 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-3632452123‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.821 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-1159919051‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.834 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-263292662‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.865 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-3512562093‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.929 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-3108916391‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.942 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-3284589633‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.955 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-2462505250‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.964 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-2935620268‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.971 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-581944434‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:24.978 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_24-2233326408‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:25.102 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_25-1376929902‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:25.114 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_25-280452812‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:25.125 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_25-3335309841‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:25.163 Python[84942:5966999] Error creating directory 
+ The volume ‚ÄúMacintosh HD‚Äù is out of space. You can‚Äôt save the file ‚Äúmpsgraph-84942-2026-05-09_23_17_25-2335409871‚Äù because the volume ‚ÄúMacintosh HD‚Äù is out of space.
+2026-05-09 23:17:33,732 | ERROR    | malayalam_tts_dataset.pipeline.build_dataset | Transcription failed
+Traceback (most recent call last):
+  File "/Users/raman/datascience/sound/ragam.ai/src/malayalam_tts_dataset/pipeline/build_dataset.py", line 277, in _process_one_url
+    transcript_segments = self.transcriber.transcribe(trim_result.output_path)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/src/malayalam_tts_dataset/asr/whisper_transcriber.py", line 130, in transcribe
+    result = self.model(
+             ^^^^^^^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/pipelines/automatic_speech_recognition.py", line 244, in __call__
+    return super().__call__(inputs, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/pipelines/base.py", line 1258, in __call__
+    return next(
+           ^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/pipelines/pt_utils.py", line 126, in __next__
+    item = next(self.iterator)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/pipelines/pt_utils.py", line 271, in __next__
+    processed = self.infer(next(self.iterator), **self.params)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/pipelines/base.py", line 1165, in forward
+    model_outputs = self._forward(model_inputs, **forward_params)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/pipelines/automatic_speech_recognition.py", line 526, in _forward
+    tokens = self.model.generate(**generate_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/models/whisper/generation_whisper.py", line 855, in generate
+    ) = self.generate_with_fallback(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/models/whisper/generation_whisper.py", line 1027, in generate_with_fallback
+    seek_outputs = super().generate(
+                   ^^^^^^^^^^^^^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/generation/utils.py", line 2560, in generate
+    result = decoding_method(
+             ^^^^^^^^^^^^^^^^
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/generation/utils.py", line 3369, in _beam_search
+    model_kwargs["past_key_values"].reorder_cache(beam_idx)
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/cache_utils.py", line 1573, in reorder_cache
+    self.cross_attention_cache.reorder_cache(beam_idx)
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/cache_utils.py", line 1171, in reorder_cache
+    self.layers[layer_idx].reorder_cache(beam_idx)
+  File "/Users/raman/datascience/sound/ragam.ai/mbappe/lib/python3.11/site-packages/transformers/cache_utils.py", line 105, in reorder_cache
+    self.keys = self.keys.index_select(0, beam_idx.to(self.keys.device))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: MPS backend out of memory (MPS allocated: 20.09 GiB, other allocations: 27.52 MiB, max allowed: 20.13 GiB). Tried to allocate 29.30 MiB on private pool. Use PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0 to disable upper limit for memory allocations (may cause system failure).
+2026-05-09 23:17:34,028 | ERROR    | malayalam_tts_dataset.pipeline.build_dataset | Failed at stage 'transcription': MPS backend out of memory (MPS allocated: 20.09 GiB, other allocations: 27.52 MiB, max allowed: 20.13 GiB). Tried to allocate 29.30 MiB on private pool. Use PYTORCH_MPS_HIGH_WATERMARK_RATIO=0.0 to disable upper limit for memory allocations (may cause system failure).
+2026-05-09 23:17:35,043 | INFO     | malayalam_tts_dataset.pipeline.build_dataset | Sleeping 30 seconds before next item
+Killed: 9
+(mbappe) ramans-MacBook-Air:ragam.ai raman$ /opt/homebrew/Cellar/python@3.11/3.11.15_1/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
