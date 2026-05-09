@@ -135,6 +135,7 @@ class WhisperTranscriber:
             generate_kwargs={
                 "language": self.language,
                 "task": "transcribe",
+                "num_beams": 1,       # greedy decoding — avoids MPS/GPU OOM on Apple Silicon
             },
         )
 
