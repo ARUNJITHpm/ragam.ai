@@ -5,6 +5,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from tqdm import tqdm
+
 from malayalam_tts_dataset.asr.whisper_transcriber import (
     WhisperTranscriber,
     save_transcript_json,
@@ -93,7 +95,15 @@ class DatasetBuildPipeline:
         all_dataset_records: list[DatasetRecord] = []
         errors: list[dict[str, Any]] = []
 
-        for index, url in enumerate(self.config.video_urls, start=1):
+        url_bar = tqdm(
+            self.config.video_urls,
+            desc="Videos",
+            unit="video",
+            position=0,
+        )
+        for index, url in enumerate(url_bar, start=1):
+            short_url = url if len(url) <= 50 else url[:47] + "..."
+            url_bar.set_postfix_str(short_url)
             logger.info("=" * 90)
             logger.info("Processing URL %s/%s: %s", index, len(self.config.video_urls), url)
 
@@ -102,6 +112,7 @@ class DatasetBuildPipeline:
 
             if result["success"]:
                 all_dataset_records.extend(result["dataset_records"])
+                url_bar.set_postfix_str(f"OK ({len(result['dataset_records'])} utterances)")
             else:
                 errors.append(
                     {
@@ -111,6 +122,7 @@ class DatasetBuildPipeline:
                         "error": result.get("error"),
                     }
                 )
+                url_bar.set_postfix_str(f"FAILED at {result.get('failed_stage')}")
 
             self._sleep_between_items(index)
 
@@ -194,149 +206,174 @@ class DatasetBuildPipeline:
             "error": None,
         }
 
-        download_result = self.downloader.download(url)
-        item_result["video_id"] = download_result.video_id or None
-        item_result["download"] = {
-            "video_id": download_result.video_id,
-            "source_url": download_result.source_url,
-            "wav_path": str(download_result.wav_path),
-            "title": download_result.title,
-            "success": download_result.success,
-            "error": download_result.error,
-            "used_existing": download_result.used_existing,
-            "fresh_download": download_result.fresh_download,
-            "download_attempted": download_result.download_attempted,
-        }
-
-        if download_result.used_existing:
-            logger.info("Using existing WAV: %s", download_result.wav_path)
-        elif download_result.fresh_download:
-            logger.info("Fresh download successful: %s", download_result.wav_path)
-        elif download_result.download_attempted and not download_result.success:
-            logger.info("Download attempted and failed")
-
-        if not download_result.success:
-            return self._fail(item_result, "download", download_result.error)
-
-        required_full_audio_duration = (
-            self.config.audio.trim_start_seconds
-            + self.config.audio.trim_duration_seconds
+        _STAGE_NAMES = ["download", "validate", "trim", "validate-trim", "transcribe", "segment"]
+        stage_bar = tqdm(
+            total=len(_STAGE_NAMES),
+            desc=f"  [{index}] stages",
+            unit="stage",
+            position=1,
+            leave=False,
         )
-
-        full_validation = validate_audio_file(
-            download_result.wav_path,
-            min_duration_sec=required_full_audio_duration,
-        )
-        item_result["full_audio_validation"] = validation_result_to_dict(full_validation)
-
-        if not full_validation.is_valid:
-            return self._fail(
-                item_result,
-                "full_audio_validation",
-                "; ".join(full_validation.errors),
-            )
-
-        logger.info("Full audio validation successful")
-
-        trimmed_wav_path = (
-            self.config.audio_trimmed_dir / f"{download_result.video_id}_trimmed.wav"
-        )
-
-        trim_result = trim_audio_window(
-            input_wav_path=download_result.wav_path,
-            output_wav_path=trimmed_wav_path,
-            start_seconds=self.config.audio.trim_start_seconds,
-            duration_seconds=self.config.audio.trim_duration_seconds,
-            overwrite=self.overwrite,
-        )
-        item_result["trim"] = trim_result_to_dict(trim_result)
-
-        if not trim_result.success:
-            return self._fail(item_result, "trim", trim_result.error)
-
-        logger.info("Trim successful: %s", trim_result.output_path)
-
-        trimmed_validation = validate_audio_file(
-            trim_result.output_path,
-            min_duration_sec=max(0.1, self.config.audio.trim_duration_seconds - 0.25),
-        )
-        item_result["trimmed_audio_validation"] = validation_result_to_dict(
-            trimmed_validation
-        )
-
-        if not trimmed_validation.is_valid:
-            return self._fail(
-                item_result,
-                "trimmed_audio_validation",
-                "; ".join(trimmed_validation.errors),
-            )
-
-        logger.info("Trimmed audio validation successful")
 
         try:
-            transcript_segments = self.transcriber.transcribe(trim_result.output_path)
-
-            transcript_json_path = (
-                self.config.transcripts_dir / f"{download_result.video_id}_segments.json"
-            )
-
-            save_transcript_json(
-                video_id=download_result.video_id,
-                source_path=trim_result.output_path,
-                model_name=self.config.asr.whisper_model,
-                language=self.config.asr.language,
-                segments=transcript_segments,
-                output_path=transcript_json_path,
-            )
-
-            item_result["transcription"] = {
-                "success": True,
-                "json_path": str(transcript_json_path),
-                "model_name": self.config.asr.whisper_model,
-                "language": self.config.asr.language,
-                "segment_count": len(transcript_segments),
-                "preview": [segment.text for segment in transcript_segments[:5]],
-                "segments": transcript_segments_to_dicts(transcript_segments),
-                "error": None,
+            stage_bar.set_postfix_str("downloading")
+            download_result = self.downloader.download(url)
+            item_result["video_id"] = download_result.video_id or None
+            item_result["download"] = {
+                "video_id": download_result.video_id,
+                "source_url": download_result.source_url,
+                "wav_path": str(download_result.wav_path),
+                "title": download_result.title,
+                "success": download_result.success,
+                "error": download_result.error,
+                "used_existing": download_result.used_existing,
+                "fresh_download": download_result.fresh_download,
+                "download_attempted": download_result.download_attempted,
             }
+            stage_bar.update(1)
 
-            logger.info("Transcription successful: %s segments", len(transcript_segments))
+            if download_result.used_existing:
+                logger.info("Using existing WAV: %s", download_result.wav_path)
+            elif download_result.fresh_download:
+                logger.info("Fresh download successful: %s", download_result.wav_path)
+            elif download_result.download_attempted and not download_result.success:
+                logger.info("Download attempted and failed")
 
-        except Exception as exc:
-            logger.exception("Transcription failed")
-            return self._fail(item_result, "transcription", str(exc))
+            if not download_result.success:
+                return self._fail(item_result, "download", download_result.error)
 
-        try:
-            dataset_records = segment_transcribed_audio(
-                trimmed_wav_path=trim_result.output_path,
-                transcript_segments=transcript_segments,
-                video_id=download_result.video_id,
-                source_url=download_result.source_url,
-                output_segments_dir=self.config.segments_dir,
-                min_utterance_seconds=self.config.audio.min_utterance_seconds,
-                max_utterance_seconds=self.config.audio.max_utterance_seconds,
-                silence_thresh_dbfs=self.config.audio.silence_thresh_dbfs,
-                min_silence_len_ms=self.config.audio.min_silence_len_ms,
-                keep_silence_ms=self.config.audio.keep_silence_ms,
+            required_full_audio_duration = (
+                self.config.audio.trim_start_seconds
+                + self.config.audio.trim_duration_seconds
+            )
+
+            stage_bar.set_postfix_str("validating full audio")
+            full_validation = validate_audio_file(
+                download_result.wav_path,
+                min_duration_sec=required_full_audio_duration,
+            )
+            item_result["full_audio_validation"] = validation_result_to_dict(full_validation)
+            stage_bar.update(1)
+
+            if not full_validation.is_valid:
+                return self._fail(
+                    item_result,
+                    "full_audio_validation",
+                    "; ".join(full_validation.errors),
+                )
+
+            logger.info("Full audio validation successful")
+
+            trimmed_wav_path = (
+                self.config.audio_trimmed_dir / f"{download_result.video_id}_trimmed.wav"
+            )
+
+            stage_bar.set_postfix_str("trimming audio")
+            trim_result = trim_audio_window(
+                input_wav_path=download_result.wav_path,
+                output_wav_path=trimmed_wav_path,
+                start_seconds=self.config.audio.trim_start_seconds,
+                duration_seconds=self.config.audio.trim_duration_seconds,
                 overwrite=self.overwrite,
             )
+            item_result["trim"] = trim_result_to_dict(trim_result)
+            stage_bar.update(1)
 
-            item_result["segmentation"] = {
-                "success": True,
-                "utterance_count": len(dataset_records),
-                "records": dataset_records_to_dicts(dataset_records),
-                "error": None,
-            }
-            item_result["dataset_records"] = dataset_records
+            if not trim_result.success:
+                return self._fail(item_result, "trim", trim_result.error)
 
-            logger.info("Segmentation successful: %s utterances", len(dataset_records))
+            logger.info("Trim successful: %s", trim_result.output_path)
 
-        except Exception as exc:
-            logger.exception("Segmentation failed")
-            return self._fail(item_result, "segmentation", str(exc))
+            stage_bar.set_postfix_str("validating trimmed audio")
+            trimmed_validation = validate_audio_file(
+                trim_result.output_path,
+                min_duration_sec=max(0.1, self.config.audio.trim_duration_seconds - 0.25),
+            )
+            item_result["trimmed_audio_validation"] = validation_result_to_dict(
+                trimmed_validation
+            )
+            stage_bar.update(1)
 
-        item_result["success"] = True
-        return item_result
+            if not trimmed_validation.is_valid:
+                return self._fail(
+                    item_result,
+                    "trimmed_audio_validation",
+                    "; ".join(trimmed_validation.errors),
+                )
+
+            logger.info("Trimmed audio validation successful")
+
+            try:
+                stage_bar.set_postfix_str("transcribing (Whisper)")
+                transcript_segments = self.transcriber.transcribe(trim_result.output_path)
+                stage_bar.update(1)
+
+                transcript_json_path = (
+                    self.config.transcripts_dir / f"{download_result.video_id}_segments.json"
+                )
+
+                save_transcript_json(
+                    video_id=download_result.video_id,
+                    source_path=trim_result.output_path,
+                    model_name=self.config.asr.whisper_model,
+                    language=self.config.asr.language,
+                    segments=transcript_segments,
+                    output_path=transcript_json_path,
+                )
+
+                item_result["transcription"] = {
+                    "success": True,
+                    "json_path": str(transcript_json_path),
+                    "model_name": self.config.asr.whisper_model,
+                    "language": self.config.asr.language,
+                    "segment_count": len(transcript_segments),
+                    "preview": [segment.text for segment in transcript_segments[:5]],
+                    "segments": transcript_segments_to_dicts(transcript_segments),
+                    "error": None,
+                }
+
+                logger.info("Transcription successful: %s segments", len(transcript_segments))
+
+            except Exception as exc:
+                logger.exception("Transcription failed")
+                return self._fail(item_result, "transcription", str(exc))
+
+            try:
+                stage_bar.set_postfix_str("segmenting utterances")
+                dataset_records = segment_transcribed_audio(
+                    trimmed_wav_path=trim_result.output_path,
+                    transcript_segments=transcript_segments,
+                    video_id=download_result.video_id,
+                    source_url=download_result.source_url,
+                    output_segments_dir=self.config.segments_dir,
+                    min_utterance_seconds=self.config.audio.min_utterance_seconds,
+                    max_utterance_seconds=self.config.audio.max_utterance_seconds,
+                    silence_thresh_dbfs=self.config.audio.silence_thresh_dbfs,
+                    min_silence_len_ms=self.config.audio.min_silence_len_ms,
+                    keep_silence_ms=self.config.audio.keep_silence_ms,
+                    overwrite=self.overwrite,
+                )
+                stage_bar.update(1)
+
+                item_result["segmentation"] = {
+                    "success": True,
+                    "utterance_count": len(dataset_records),
+                    "records": dataset_records_to_dicts(dataset_records),
+                    "error": None,
+                }
+                item_result["dataset_records"] = dataset_records
+
+                logger.info("Segmentation successful: %s utterances", len(dataset_records))
+
+            except Exception as exc:
+                logger.exception("Segmentation failed")
+                return self._fail(item_result, "segmentation", str(exc))
+
+            item_result["success"] = True
+            return item_result
+
+        finally:
+            stage_bar.close()
 
     def _write_split_outputs(self, split: DatasetSplit) -> dict[str, Path]:
         paths = {

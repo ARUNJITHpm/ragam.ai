@@ -4,7 +4,11 @@ import argparse
 import json
 import os
 import sys
+import warnings
 from pathlib import Path
+
+# Suppress pandas version compatibility noise from the Anaconda environment.
+warnings.filterwarnings("ignore", message="Pandas requires version", category=UserWarning)
 
 
 def _bootstrap_src_path() -> None:

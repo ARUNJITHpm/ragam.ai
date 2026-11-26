@@ -34,7 +34,7 @@ class ASRConfig:
 
 @dataclass(frozen=True)
 class YouTubeConfig:
-    cookie_file: Path
+    cookie_file: Path | None
     use_browser_cookies: bool
     browser_for_cookies: str
     sleep_between_downloads: int
@@ -176,9 +176,11 @@ def _parse_config(raw: dict[str, Any], project_root: Path) -> AppConfig:
     if not isinstance(runtime_raw, dict):
         raise ConfigError("'runtime' section must be a mapping.")
 
-    cookie_file = _resolve_project_path(
-        youtube_raw.get("cookie_file", "cookies/cookies.txt"),
-        project_root,
+    cookie_file_raw = youtube_raw.get("cookie_file", "cookies/cookies.txt")
+    cookie_file = (
+        _resolve_project_path(cookie_file_raw, project_root)
+        if cookie_file_raw is not None
+        else None
     )
 
     audio = AudioConfig(
@@ -349,8 +351,9 @@ def create_output_dirs(config: AppConfig) -> None:
         config.audio_trimmed_dir,
         config.segments_dir,
         config.transcripts_dir,
-        config.youtube.cookie_file.parent,
     ]
+    if config.youtube.cookie_file is not None:
+        directories.append(config.youtube.cookie_file.parent)
 
     for directory in directories:
         directory.mkdir(parents=True, exist_ok=True)
@@ -393,7 +396,11 @@ def config_to_dict(config: AppConfig) -> dict[str, Any]:
             "keep_empty_segments": config.asr.keep_empty_segments,
         },
         "youtube": {
-            "cookie_file": str(config.youtube.cookie_file),
+            "cookie_file": (
+                str(config.youtube.cookie_file)
+                if config.youtube.cookie_file is not None
+                else None
+            ),
             "use_browser_cookies": config.youtube.use_browser_cookies,
             "browser_for_cookies": config.youtube.browser_for_cookies,
             "sleep_between_downloads": config.youtube.sleep_between_downloads,

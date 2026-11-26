@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 
 from pydub import AudioSegment, silence
+from tqdm import tqdm
 
 from malayalam_tts_dataset.asr.whisper_transcriber import TranscriptSegment
 from malayalam_tts_dataset.audio.validation import validate_audio_file, validate_audio_segment
@@ -103,7 +104,7 @@ def segment_transcribed_audio(
 
     records: list[DatasetRecord] = []
 
-    for utterance_index, group in enumerate(utterance_groups):
+    for utterance_index, group in enumerate(tqdm(utterance_groups, desc="    Utterances", unit="utt", leave=False, position=2)):
         text = _join_segment_text(group)
         if not text:
             continue

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import logging
+import warnings
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
@@ -24,6 +26,12 @@ _MALAYALAM_MIN_SCRIPT_RATIO = 0.5
 
 # Gap between words (seconds) that triggers a new segment
 _WORD_GAP_SPLIT_SEC = 0.8
+
+# Force-flush a segment when it exceeds this duration even without a gap or
+# punctuation.  Continuous Malayalam speech often has no long pauses and no
+# sentence-ending punctuation, so without this limit a single segment can cover
+# the entire audio and become unsplittable by the downstream segmenter.
+_MAX_SEGMENT_SEC = 10.0
 
 # Standard alignment heads per Whisper model size (decoder layer count → size).
 # Fine-tuned models often omit these from their generation config; we patch them
@@ -87,25 +95,45 @@ class WhisperTranscriber:
                 model=self.model_name,
                 device=self.device,
                 torch_dtype=torch.float16 if self.device == "cuda" else torch.float32,
+                # eager is required for output_attentions=True (word-level timestamps);
+                # SDPA silently falls back to eager anyway, so make it explicit.
+                model_kwargs={"attn_implementation": "eager"},
             )
             self._patch_alignment_heads()
         return self._pipe
 
     def _patch_alignment_heads(self) -> None:
-        """Inject alignment_heads if the model's generation config omits them.
+        """Inject alignment_heads into the pipeline's generation config.
 
-        Fine-tuned Whisper models (e.g. thennal/whisper-medium-ml) are often
-        saved without alignment_heads, which are required for word-level
-        timestamps.  We detect the model size from decoder_layers and apply
-        the standard OpenAI heads for that size.
+        Fine-tuned Whisper models (e.g. thennal/whisper-medium-ml) are saved
+        without alignment_heads in generation_config.json.  Newer transformers
+        pipelines snapshot a deep copy of model.generation_config into
+        pipe.generation_config at init time and then pass THAT copy to
+        model.generate() — so patching model.generation_config after the fact
+        has no effect.  We must patch pipe.generation_config directly.
         """
-        gen_config = self._pipe.model.generation_config
-        if getattr(gen_config, "alignment_heads", None):
-            return
+        # Determine heads from model decoder_layers, or reuse existing.
+        model_gen_config = self._pipe.model.generation_config
+        existing = getattr(model_gen_config, "alignment_heads", None)
+        if existing:
+            heads = existing
+        else:
+            num_layers = getattr(self._pipe.model.config, "decoder_layers", None)
+            size = _DECODER_LAYERS_TO_SIZE.get(num_layers, "medium")
+            heads = _ALIGNMENT_HEADS[size]
+            model_gen_config.alignment_heads = heads
 
-        num_layers = getattr(self._pipe.model.config, "decoder_layers", None)
-        size = _DECODER_LAYERS_TO_SIZE.get(num_layers, "medium")
-        gen_config.alignment_heads = _ALIGNMENT_HEADS[size]
+        # Patch the pipeline's own generation_config — this is what _forward
+        # actually passes to model.generate() (see pipeline base.py line 999).
+        pipe_gen_config = self._pipe.generation_config
+        if not getattr(pipe_gen_config, "alignment_heads", None):
+            pipe_gen_config.alignment_heads = heads
+
+        # Some fine-tuned Whisper models ship with forced_decoder_ids that
+        # hardcode language/task tokens.  When we also pass language= and task=
+        # in generate_kwargs the pipeline emits a conflict warning and ignores
+        # forced_decoder_ids.  Clear it here so our explicit kwargs win cleanly.
+        pipe_gen_config.forced_decoder_ids = None
 
     def transcribe(self, wav_path: str | Path) -> list[TranscriptSegment]:
         """
@@ -127,17 +155,28 @@ class WhisperTranscriber:
         if not audio_path.exists():
             raise FileNotFoundError(f"Audio file not found: {audio_path}")
 
-        result = self.model(
-            str(audio_path),
-            chunk_length_s=30,
-            stride_length_s=5,
-            return_timestamps="word",
-            generate_kwargs={
-                "language": self.language,
-                "task": "transcribe",
-                "num_beams": 1,       # greedy decoding — avoids MPS/GPU OOM on Apple Silicon
-            },
-        )
+        # The attention mask warning comes from logger.warning_once() (Python logging),
+        # not warnings.warn(), so suppress it via the logging level.
+        _gen_logger = logging.getLogger("transformers.generation.utils")
+        _saved_level = _gen_logger.level
+        _gen_logger.setLevel(logging.ERROR)
+        try:
+            with warnings.catch_warnings():
+                # Transformers internally still passes `inputs=` to generate(); suppress until fixed upstream.
+                warnings.filterwarnings("ignore", message="The input name `inputs` is deprecated", category=FutureWarning)
+                result = self.model(
+                    str(audio_path),
+                    chunk_length_s=30,
+                    stride_length_s=5,
+                    return_timestamps="word",
+                    generate_kwargs={
+                        "language": self.language,
+                        "task": "transcribe",
+                        "num_beams": 1,       # greedy decoding — avoids MPS/GPU OOM on Apple Silicon
+                    },
+                )
+        finally:
+            _gen_logger.setLevel(_saved_level)
 
         word_chunks = result.get("chunks", [])
         if not isinstance(word_chunks, list):
@@ -155,6 +194,8 @@ class WhisperTranscriber:
         Splits on:
         - Pause gap between consecutive words >= _WORD_GAP_SPLIT_SEC
         - Sentence-ending punctuation (. ! ? । ॥)
+        - Current segment duration reaching _MAX_SEGMENT_SEC (prevents one
+          giant segment when speech is continuous with no pauses or punctuation)
         """
         segments: list[TranscriptSegment] = []
         current_words: list[str] = []
@@ -179,8 +220,10 @@ class WhisperTranscriber:
             gap = word_start - prev_end if current_words else 0.0
             ends_sentence = any(text.endswith(p) for p in sentence_endings)
             split_on_gap = gap >= _WORD_GAP_SPLIT_SEC and current_words
+            current_duration = (word_start - current_start) if current_start is not None else 0.0
+            split_on_duration = current_duration >= _MAX_SEGMENT_SEC and current_words
 
-            if split_on_gap:
+            if split_on_gap or split_on_duration:
                 seg = self._flush_segment(current_words, current_start, current_end)
                 if seg:
                     segments.append(seg)
